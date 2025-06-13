@@ -2,7 +2,7 @@
     "name": "@purinton/mcp-client",
     "type": "module",
     "version": "1.0.0",
-    "description": "A Node.js mcp-client.",
+    "description": "A robust Node.js client for connecting to Model Context Protocol (MCP) servers with automatic reconnect, authentication, and flexible transport support.",
     "main": "index.cjs",
     "module": "index.mjs",
     "types": "index.d.ts",
@@ -28,8 +28,16 @@
         "url": "git+https://github.com/purinton/mcp-client.git"
     },
     "keywords": [
-        "mcp-client",
-        "nodejs"
+        "mcp",
+        "model context protocol",
+        "client",
+        "nodejs",
+        "sdk",
+        "ai",
+        "ml",
+        "api",
+        "reconnect",
+        "authentication"
     ],
     "author": "Russell Purinton <russell@purinton.us>",
     "license": "MIT",
@@ -47,5 +55,10 @@
             "**/?(*.)+(spec|test).mjs",
             "**/?(*.)+(spec|test).cjs"
         ]
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.12.3",
+        "@purinton/log": "^1.0.6",
+        "@purinton/path": "^1.0.9"
     }
 }

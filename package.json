@@ -1,7 +1,7 @@
 {
     "name": "@purinton/mcp-client",
     "type": "module",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A robust Node.js client for connecting to Model Context Protocol (MCP) servers with automatic reconnect, authentication, and flexible transport support.",
     "main": "index.cjs",
     "module": "index.mjs",

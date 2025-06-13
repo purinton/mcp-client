@@ -1,0 +1,51 @@
+{
+    "name": "@purinton/mcp-client",
+    "type": "module",
+    "version": "1.0.0",
+    "description": "A Node.js mcp-client.",
+    "main": "index.cjs",
+    "module": "index.mjs",
+    "types": "index.d.ts",
+    "files": [
+        "index.mjs",
+        "index.cjs",
+        "index.d.ts",
+        "README.md",
+        "LICENSE"
+    ],
+    "exports": {
+        ".": {
+            "import": "./index.mjs",
+            "require": "./index.cjs",
+            "types": "./index.d.ts"
+        }
+    },
+    "scripts": {
+        "test": "npx --node-options=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles --silent"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/purinton/mcp-client.git"
+    },
+    "keywords": [
+        "mcp-client",
+        "nodejs"
+    ],
+    "author": "Russell Purinton <russell@purinton.us>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/purinton/mcp-client/issues"
+    },
+    "homepage": "https://github.com/purinton/mcp-client#readme",
+    "devDependencies": {
+        "jest": "^29.7.0"
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "testMatch": [
+            "**/?(*.)+(spec|test).[jt]s?(x)",
+            "**/?(*.)+(spec|test).mjs",
+            "**/?(*.)+(spec|test).cjs"
+        ]
+    }
+}

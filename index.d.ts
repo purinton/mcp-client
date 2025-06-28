@@ -1,7 +1,7 @@
 // Type declarations for mcpClient
 
 export interface McpClientOptions {
-  logger?: any;
+  log?: any;
   port?: number | string;
   baseUrl?: string;
   token?: string;

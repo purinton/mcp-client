@@ -21,7 +21,7 @@
 
 - Connects to MCP servers with automatic reconnect
 - Supports both ESM and CommonJS
-- Customizable logger, transport, and client classes
+- Customizable log, transport, and client classes
 - Reads configuration from environment variables or options
 - TypeScript type definitions included
 
@@ -73,14 +73,15 @@ const mcpClient = require('@purinton/mcp-client');
 
 ## API
 
-### mcpClient(options?: McpClientOptions): Promise<any>
+### `mcpClient(options?: McpClientOptions): Promise<any>`
 
 Creates and connects an MCP client. Returns a connected client instance. Automatically reconnects on disconnect.
 
-#### Options (McpClientOptions):
-- `logger` (optional): Custom logger (default: @purinton/log)
+#### Options (McpClientOptions)
+
+- `log` (optional): Custom log (default: @purinton/log)
 - `port` (optional): MCP server port (default: 1234)
-- `baseUrl` (optional): MCP server URL (default: http://localhost:1234/)
+- `baseUrl` (optional): MCP server URL (default: <http://localhost:1234/>)
 - `token` (optional): Authentication token (default: from MCP_TOKEN env)
 - `ClientClass` (optional): Custom client class (default: SDK Client)
 - `TransportClass` (optional): Custom transport class (default: SDK StreamableHTTPClientTransport)

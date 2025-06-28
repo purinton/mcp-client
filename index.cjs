@@ -1,11 +1,33 @@
+/**
+ * MCP Client module for connecting to a Model Context Protocol server (CommonJS version).
+ *
+ * @module mcpClient
+ * @author
+ * @license MIT
+ */
 const fs = require('fs');
-const log = require('@purinton/log');
+const logger = require('@purinton/log');
 const pathUtil = require('@purinton/path');
 const { Client } = require('@modelcontextprotocol/sdk/client/index.js');
 const { StreamableHTTPClientTransport } = require('@modelcontextprotocol/sdk/client/streamableHttp.js');
 
+/**
+ * Creates and connects an MCP client with automatic reconnection and token authentication.
+ *
+ * @async
+ * @function mcpClient
+ * @param {Object} [options] - Configuration options.
+ * @param {Object} [options.log=log] - Logger instance for logging output.
+ * @param {number} [options.port=process.env.MCP_PORT||1234] - Port for the MCP server.
+ * @param {string} [options.baseUrl=process.env.MCP_URL||`http://localhost:${port}/`] - Base URL for the MCP server.
+ * @param {string} [options.token] - Authentication token for the MCP server. Falls back to MCP_TOKEN env var.
+ * @param {Function} [options.ClientClass=Client] - Client class to instantiate.
+ * @param {Function} [options.TransportClass=StreamableHTTPClientTransport] - Transport class to use for connection.
+ * @returns {Promise<Client>} Resolves to a connected MCP Client instance.
+ * @throws {Error} If authentication token is missing.
+ */
 async function mcpClient({
-  logger = log,
+  log = logger,
   port = process.env.MCP_PORT || 1234,
   baseUrl = process.env.MCP_URL || `http://localhost:${port}/`,
   token,
@@ -32,7 +54,7 @@ async function mcpClient({
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     version = packageJson.version || version;
   } catch (err) {
-    logger.warn && logger.warn('[CLIENT] Could not read package.json for version:', err && err.stack ? err.stack : err);
+    log.warn && log.warn('[CLIENT] Could not read package.json for version:', err && err.stack ? err.stack : err);
   }
 
   async function connectWithRetry() {
@@ -42,7 +64,7 @@ async function mcpClient({
       authToken = process.env.MCP_TOKEN;
     }
     if (!authToken) {
-      logger.error && logger.error('No MCP_TOKEN provided for MCP client authentication.');
+      log.error && log.error('No MCP_TOKEN provided for MCP client authentication.');
       throw new Error('Missing MCP_TOKEN for MCP client authentication.');
     }
     try {
@@ -57,10 +79,10 @@ async function mcpClient({
           }
         }
       };
-      logger.debug && logger.debug(`[DEBUG] Using MCP_TOKEN for Authorization header`);
+      log.debug && log.debug(`[DEBUG] Using MCP_TOKEN for Authorization header`);
       transport = new TransportClass(baseUrl, transportOptions);
       await client.connect(transport);
-      logger.debug && logger.debug(`MCP Client connected to ${baseUrl}`);
+      log.debug && log.debug(`MCP Client connected to ${baseUrl}`);
       reconnectDelay = RECONNECT_BASE_DELAY;
       if (typeof transport.on === 'function') {
         transport.on('close', handleDisconnect);
@@ -68,7 +90,7 @@ async function mcpClient({
       }
       return client;
     } catch (error) {
-      logger.error && logger.error('Error connecting MCP Client:', error);
+      log.error && log.error('Error connecting MCP Client:', error);
       await new Promise(resolve => setTimeout(resolve, reconnectDelay));
       reconnectDelay = Math.min(reconnectDelay * 2, RECONNECT_MAX_DELAY);
       return connectWithRetry();
@@ -76,7 +98,7 @@ async function mcpClient({
   }
 
   function handleDisconnect() {
-    logger.debug && logger.debug('MCP Client disconnected. Attempting to reconnect...');
+    log.debug && log.debug('MCP Client disconnected. Attempting to reconnect...');
     setTimeout(connectWithRetry, reconnectDelay);
     reconnectDelay = Math.min(reconnectDelay * 2, RECONNECT_MAX_DELAY);
   }
@@ -84,4 +106,8 @@ async function mcpClient({
   return connectWithRetry();
 }
 
+/**
+ * CommonJS export for mcpClient.
+ * @see mcpClient
+ */
 module.exports = mcpClient;

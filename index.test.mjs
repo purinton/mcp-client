@@ -4,7 +4,7 @@ import { jest, test, expect, beforeEach, afterEach } from '@jest/globals';
 
 const mockConnect = jest.fn();
 const mockOn = jest.fn();
-const mockLogger = {
+const mocklog = {
   debug: jest.fn(),
   error: jest.fn(),
   warn: jest.fn(),
@@ -32,26 +32,26 @@ describe('mcpClient', () => {
   test('should initialize and connect the MCP client', async () => {
     mockConnect.mockResolvedValueOnce();
     const client = await mcpClient({
-      logger: mockLogger,
+      log: mocklog,
       ClientClass: MockClient,
       TransportClass: MockTransport,
       token: 'test-token',
     });
     expect(client).toBeInstanceOf(MockClient);
     expect(mockConnect).toHaveBeenCalled();
-    expect(mockLogger.debug).toHaveBeenCalledWith(expect.stringContaining('MCP Client connected'));
+    expect(mocklog.debug).toHaveBeenCalledWith(expect.stringContaining('MCP Client connected'));
   });
 
   test('should throw error if no token is provided', async () => {
     delete process.env.MCP_TOKEN;
     await expect(
       mcpClient({
-        logger: mockLogger,
+        log: mocklog,
         ClientClass: MockClient,
         TransportClass: MockTransport,
         token: undefined,
       })
     ).rejects.toThrow('Missing MCP_TOKEN for MCP client authentication.');
-    expect(mockLogger.error).toHaveBeenCalledWith('No MCP_TOKEN provided for MCP client authentication.');
+    expect(mocklog.error).toHaveBeenCalledWith('No MCP_TOKEN provided for MCP client authentication.');
   });
 });
